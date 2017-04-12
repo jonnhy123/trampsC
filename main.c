@@ -12,8 +12,10 @@ void printPause();//Pausa a execução e limpa a tela
 void deposito(controlaNos *topo, int empilha);//Empilha valores
 void saque(controlaNos *topo); //Desempilha valores
 void imprime(controlaNos topo); //Imprime a pilha
+void confirmaDeposito(controlaNos *topo, int vlrDeposito);
+void senhaUsuario(controlaNos *topo, int vlrDeposito);
 int vazio(controlaNos topo); //Verifica se a pilha esta vazia
-int total(controlaNos topo);
+int saldoTotal(controlaNos topo);//verefica o total de saldo na conta
 
 int main(int argc, char *argv[]) {
 	controlaNos topoPilha = NULL;
@@ -57,7 +59,7 @@ int main(int argc, char *argv[]) {
 				if(vazio(topoPilha)){
 					printf("Voce nao possue saldo!\n\n");
 				}else {
-					total(topoPilha);	
+					saldoTotal(topoPilha);	
 				}
 				printPause();
 				break;	 
@@ -85,13 +87,7 @@ void saque(controlaNos *topo){
 	
 	printf("Favor, informe o valor desejado(a)\n");
 	scanf("%f",&valorSaque);
-/*	
-	if(){
-		printf("Saque no valor %.2f realizado com sucesso.", popNo->valor);
-	}else{
-		
-	}	
-*/	
+	
 	popNo = *topo;
 	*topo = (*topo)->proximoNo;
 	
@@ -101,38 +97,67 @@ void saque(controlaNos *topo){
 //função que vai inserir elementos na pilha
 void deposito(controlaNos *topo, int vlrDeposito){
 	controlaNos novoNo = NULL;
-	int senha = 4221;
-	int userSenha = 0;
+
 	novoNo = (controlaNos) malloc(sizeof(nos));
+
 	if(novoNo == NULL)
 	{
-		printf("O valor nao foi depositado!\n\n");
+		printf("Erro na memoria!\n\n");
 		printPause();
 	}else if((vlrDeposito != 0)&&(vlrDeposito >0))
 		{
 			if(vlrDeposito >= 1000)
 			{
-				printf("PARA DEPOSITOS ACIMA DE 1.000,00 SERA NECESSARIO SENHA DO FAVORECIDO!!!\n\n");
-				printf("Favor, informe sua senha para concluir o deposito!\n");
-				scanf("%d",&userSenha);	
-				if(senha == userSenha)
-				{
-					printf("Deposito realizado com sucesso!\n\n");
-					novoNo->valor=vlrDeposito;
-					novoNo->proximoNo = *topo;
-					*topo=novoNo;
-					printPause();
-				}else
-				{
-					printf("Senha incorreta!\n\n");
-				}
+				senhaUsuario(topo,vlrDeposito);
 				printPause();
+			}else{
+				confirmaDeposito(topo,vlrDeposito);
 			}
-        	printf("Deposito realizado com sucesso!\n\n");
 		}else
 		{
 			printf("ERRO - Digite valores numericos acima de 0\n\n");
 		}
+}
+
+//eu fiz essa função para não ficar muito codigo na função deposito
+void confirmaDeposito(controlaNos *topo, int vlrDeposito){
+	controlaNos novoNo = NULL;
+
+	novoNo = (controlaNos) malloc(sizeof(nos));
+	if(novoNo == NULL)
+	{
+		printf("O valor nao foi depositado!\n\n");
+		printPause();
+	}else{
+		printf("Deposito realizado com sucesso!\n\n");
+		novoNo->valor=vlrDeposito;
+		novoNo->proximoNo = *topo;
+		*topo=novoNo;
+		printPause();	
+	}
+}
+
+//função que verefica a senha do usuario
+void senhaUsuario(controlaNos *topo, int vlrDeposito){
+	controlaNos novoNo = NULL;
+	int senha = 4221;
+	int userSenha = 0;
+	novoNo = (controlaNos) malloc(sizeof(nos));
+	printf("PARA DEPOSITOS ACIMA DE 1.000,00 SERA NECESSARIO SENHA DO FAVORECIDO!!!\n\n");
+	printf("Favor, informe sua senha para concluir o deposito!\n");
+	scanf("%d",&userSenha);	
+		if(senha == userSenha)
+		{
+			printf("Deposito realizado com sucesso!\n\n");
+			novoNo->valor=vlrDeposito;
+			novoNo->proximoNo = *topo;
+			*topo=novoNo;
+			printPause();
+		}else
+		{
+			printf("Senha incorreta!\n\n");
+		}
+	printPause();
 }
 
 //função que verefica se a função está vazia
@@ -149,7 +174,7 @@ void imprime(controlaNos topo){
 }
 
 //função que soma os valores da conta do usúario
-int total(controlaNos topo){
+int saldoTotal(controlaNos topo){
 	float valorSaldo = 0;
 	controlaNos saldo = NULL;
 	while(topo != NULL){

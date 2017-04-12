@@ -10,9 +10,10 @@ typedef nos *controlaNos;
 
 void printPause();//Pausa a execução e limpa a tela
 void deposito(controlaNos *topo, int empilha);//Empilha valores
-void sque(controlaNos *topo); //Desempilha valores
+void saque(controlaNos *topo); //Desempilha valores
 void imprime(controlaNos topo); //Imprime a pilha
 int vazio(controlaNos topo); //Verifica se a pilha esta vazia
+int total(controlaNos topo);
 
 int main(int argc, char *argv[]) {
 	controlaNos topoPilha = NULL;
@@ -24,7 +25,7 @@ int main(int argc, char *argv[]) {
                "1 - Deposito\n"
                "2 - Saque\n"
                "3 - Extrato\n"
-               "4 - Relatorios\n"
+               "4 - Total Saldo\n"
 			   "5 - Encerrar sessao\n");
         scanf("%d",&menu);
         system("cls");
@@ -51,7 +52,15 @@ int main(int argc, char *argv[]) {
 					imprime(topoPilha);
 				}   
 				printPause();
-				break; 
+				break;
+			case 4:
+				if(vazio(topoPilha)){
+					printf("A pilha esta vazia!\n");
+				}else {
+					total(topoPilha);	
+				}
+				printPause();
+				break;	 
             default:
                 printf("Opcao invalida!\n");
                 printPause();
@@ -72,9 +81,20 @@ void printPause(){
 //Esta função vai tirar o último nó da pilha, e retirá-lo de lá
 void saque(controlaNos *topo){
 	controlaNos popNo = NULL;
+	float valorSaque = 0;
 	
+	printf("Favor, informe o valor desejado(a)\n");
+	scanf("%f",&valorSaque);
+/*	
+	if(){
+		printf("Saque no valor %.2f realizado com sucesso.", popNo->valor);
+	}else{
+		
+	}	
+*/	
 	popNo = *topo;
 	*topo = (*topo)->proximoNo;
+	
 	free(popNo);
 }
 
@@ -105,4 +125,13 @@ void imprime(controlaNos topo){
 		printf("-->%.2f\n", topo->valor);
 		topo=topo->proximoNo;
 	}
-} 
+}
+
+//função que soma os valores da conta do usúario 
+int total(controlaNos topo){
+	float valorSaldo = 0;
+	while(topo != NULL){
+		valorSaldo = valorSaldo + topo->valor;
+	}
+	printf("Seu saldo eh de %.2f", valorSaldo);
+}

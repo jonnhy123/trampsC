@@ -47,7 +47,7 @@ int main(int argc, char *argv[]) {
                 break;
             case 3:
 				if(vazio(topoPilha)){
-					printf("A pilha esta vazia!\n");
+					printf("Nao ha valores a ser exibido!\n\n");
 				}else {
 					imprime(topoPilha);
 				}   
@@ -55,14 +55,14 @@ int main(int argc, char *argv[]) {
 				break;
 			case 4:
 				if(vazio(topoPilha)){
-					printf("A pilha esta vazia!\n");
+					printf("Voce nao possue saldo!\n\n");
 				}else {
 					total(topoPilha);	
 				}
 				printPause();
 				break;	 
             default:
-                printf("Opcao invalida!\n");
+                printf("Opcao invalida!\n\n");
                 printPause();
                 break;
         }
@@ -99,19 +99,40 @@ void saque(controlaNos *topo){
 }
 
 //função que vai inserir elementos na pilha
-void deposito(controlaNos *topo, int empilha){
+void deposito(controlaNos *topo, int vlrDeposito){
 	controlaNos novoNo = NULL;
-	
+	int senha = 4221;
+	int userSenha = 0;
 	novoNo = (controlaNos) malloc(sizeof(nos));
-	
-	if(novoNo == NULL){
-		printf("O valor nao foi depositado!\n");
+	if(novoNo == NULL)
+	{
+		printf("O valor nao foi depositado!\n\n");
 		printPause();
-	}else {
-		novoNo->valor=empilha;
-		novoNo->proximoNo = *topo;
-		*topo=novoNo; 
-	}
+	}else if((vlrDeposito != 0)&&(vlrDeposito >0))
+		{
+			if(vlrDeposito >= 1000)
+			{
+				printf("PARA DEPOSITOS ACIMA DE 1.000,00 SERA NECESSARIO SENHA DO FAVORECIDO!!!\n\n");
+				printf("Favor, informe sua senha para concluir o deposito!\n");
+				scanf("%d",&userSenha);	
+				if(senha == userSenha)
+				{
+					printf("Deposito realizado com sucesso!\n\n");
+					novoNo->valor=vlrDeposito;
+					novoNo->proximoNo = *topo;
+					*topo=novoNo;
+					printPause();
+				}else
+				{
+					printf("Senha incorreta!\n\n");
+				}
+				printPause();
+			}
+        	printf("Deposito realizado com sucesso!\n\n");
+		}else
+		{
+			printf("ERRO - Digite valores numericos acima de 0\n\n");
+		}
 }
 
 //função que verefica se a função está vazia
@@ -127,11 +148,13 @@ void imprime(controlaNos topo){
 	}
 }
 
-//função que soma os valores da conta do usúario 
+//função que soma os valores da conta do usúario
 int total(controlaNos topo){
 	float valorSaldo = 0;
+	controlaNos saldo = NULL;
 	while(topo != NULL){
 		valorSaldo = valorSaldo + topo->valor;
+		topo=topo->proximoNo;
 	}
-	printf("Seu saldo eh de %.2f", valorSaldo);
+	printf("Seu saldo eh de RS%.2f\n\n", valorSaldo);
 }

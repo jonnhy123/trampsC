@@ -19,7 +19,6 @@ void confirmaDeposito(controlaNos *topo, int vlrDeposito);//valida o deposito
 void senhaUsuario(controlaNos *topo, int vlrDeposito);//valida senha do usuario
 void salvaRelatorio(controlaNos topo);
 int vazio(controlaNos topo); //Verifica se a pilha esta vazia
-int saldoTotal(controlaNos topo);//verefica o total de saldo na conta
 int vlrTotal(controlaNos topo);
 
 int main(int argc, char *argv[]) {
@@ -27,14 +26,13 @@ int main(int argc, char *argv[]) {
     int menu = 0, num = 0;
     float vlrDeposito = 0;
     
-    while (menu != 6) {
+    while (menu != 5) {
         printf("Escolha uma opcao:\n"
                "1 - Deposito\n"
-               "2 - Saque\n"
+               "2 - Saque(Funcao nao termina, favor nao executar)\n"
                "3 - Extrato\n"
-               "4 - Total Saldo\n"
-			   "5 - Relatorios\n"
-			   "6 - Encerrar sessao\n\n");
+			   "4 - Relatorios\n"
+			   "5 - Encerrar sessao\n\n");
         scanf("%d",&menu);
         system("cls");
         switch (menu) {
@@ -45,14 +43,14 @@ int main(int argc, char *argv[]) {
                 deposito(&topoPilha, vlrDeposito);
                 break;
             case 2:
-                if (vazio(topoPilha)) {
-                    printf("Nao ha nada para desempilhar!\n");
-                    printPause();
-                }
-                else {
-                    saque(topoPilha);
-                }
-                break;
+//               if (vazio(topoPilha)) {
+//                    printf("Nao ha nada para desempilhar!\n");
+//                    printPause();
+//                }
+//                else {
+//                    saque(topoPilha);
+//                }
+//                break;
             case 3:
 				if(vazio(topoPilha)){
 					printf("Nao ha valores a ser exibido!\n\n");
@@ -62,14 +60,6 @@ int main(int argc, char *argv[]) {
 				printPause();
 				break;
 			case 4:
-				if(vazio(topoPilha)){
-					printf("Voce nao possue saldo!\n\n");
-				}else {
-					saldoTotal(topoPilha);	
-				}
-				printPause();
-				break;
-			case 5:
 				if(vazio(topoPilha)){
 					printf("Nao ha valores a ser exibido!\n\n");
 				}else {
@@ -95,37 +85,22 @@ void printPause(){
 }
 
 //Esta função vai tirar o último nó da pilha, e retirá-lo de lá
-void saque(controlaNos *topo){
-	controlaNos novoNo = NULL;
-	float valorSaque = 0;
-	float saldoAtual = 0;
-	float teste = 0;
-	
-	printf("Favor, informe o valor desejado(a)\n");
-	scanf("%f",&valorSaque);
-	
-	//valorSaldo = valorSaldo + topo->valor;
-	//topo=topo->proximoNo;
-	
-	teste = novoNo->sTotal;
-	printf("%.2f",novoNo->sTotal);
-	
-	//saldoAtual = vlrTotal(topo);
-	//saldoAtual = saldoAtual - valorSaque;
-	//printf("%.2f\n",saldoAtual);
-	printPause();	
-	
-	
-	//valorSaldo = valorSaldo + topo->valor;
-	//topo=topo->proximoNo;
-	
-	//controlaNos popNo = NULL;
-    //popNo = *topo;
-    //*topo = (*topo)->proximoNo;
-    //free(popNo);
-	
-	free(novoNo);
-}
+//void saque(controlaNos *topo){
+//	controlaNos novoNo = NULL;
+//	float valorSaque = 0;
+//	float saldoAtual = 0;
+//	float teste = 0;
+//	
+//	printf("Favor, informe o valor desejado(a)\n");
+//	scanf("%f",&valorSaque);
+//	
+//	teste = novoNo->sTotal;
+//	printf("%.2f",novoNo->sTotal);
+//
+//	printPause();	
+//	
+//	free(novoNo);
+//}
 
 //função que pega o saldo total do usuario
 int vlrTotal(controlaNos topo){
@@ -180,14 +155,39 @@ void confirmaDeposito(controlaNos *topo, int vlrDeposito){
 	}
 }
 
-//função que salva quantidade de depositos no relátorio
+//função que exibe a quantidade e valores de depositos no relátorio
 void salvaRelatorio(controlaNos topo){
 	int count = 0;
+	float valorTDeposito = 0;
 	while(topo != NULL){
 		count++;
+		valorTDeposito = valorTDeposito + topo->valor;
 		topo=topo->proximoNo;
 	}
-	printf("Total de depositos --> %.2d\n",count);
+	printf("----------RELATORIO DE OPERACOES----------\n");
+	printf("------------------------------------------\n");
+	printf("Total de depositos.............: %.7d\n",count);
+	printf("\n\n");
+	printf("Valor dos depositos............: RS%.2f\n", valorTDeposito);
+	printf("------------------------------------------\n\n\n\n\n");
+}
+
+//função que exibe os valores dos depositos e o saldo do usuario no extrato
+void imprime(controlaNos topo){
+	int count = 1;
+	float valorSaldo = 0;
+	printf("----------EXTRATO BANCARIO---------\n");
+		printf("-----------------------------------\n");
+	while(topo != NULL){
+		printf("Deposito                  RS%.2f\n",topo->valor);
+		valorSaldo = valorSaldo + topo->valor;
+		topo=topo->proximoNo;
+		count++;
+	}
+	printf("\n\n\n\n");
+	printf("-----------------------------------\n");
+	printf("Saldo-------------------> RS%.2f\n", valorSaldo);
+	printf("-----------------------------------\n\n");
 }
 
 //função que verefica a senha do usuario
@@ -199,10 +199,10 @@ void senhaUsuario(controlaNos *topo, int vlrDeposito){
 	int userSenha = 0;
 	novoNo = (controlaNos) malloc(sizeof(nos));
 	printf("PARA DEPOSITOS ACIMA DE 1.000,00 SERA NECESSARIO SENHA DO FAVORECIDO!!!\n\n");
-	printf("Favor, informe sua senha para concluir o deposito!\n");
+	printf("Favor, informe sua senha para concluir o deposito!\n");	
 	while(aux != 0)
 	{	
-	scanf("%d",&userSenha);	
+		scanf("%d",&userSenha);
 		if(senha == userSenha)
 		{
 			printf("Deposito realizado com sucesso!\n\n");
@@ -228,16 +228,6 @@ void senhaUsuario(controlaNos *topo, int vlrDeposito){
 //função que verefica se a função está vazia
 int vazio(controlaNos topo){
 	return (topo == NULL);
-}
-
-//função que exibe os valores na pilha
-void imprime(controlaNos topo){
-	int count = 1;
-	while(topo != NULL){
-		printf("Deposito no valor de --> %.2f\n",topo->valor);
-		topo=topo->proximoNo;
-		count++;
-	}
 }
 
 //função que soma os valores da conta do usúario

@@ -3,6 +3,7 @@
 
 typedef struct no {
 	float valor;
+	float sTotal;
 	struct no *proximoNo;
 }nos;
 
@@ -12,10 +13,11 @@ void printPause();//Pausa a execução e limpa a tela
 void deposito(controlaNos *topo, int empilha);//Empilha valores
 void saque(controlaNos *topo); //Desempilha valores
 void imprime(controlaNos topo); //Imprime a pilha
-void confirmaDeposito(controlaNos *topo, int vlrDeposito);
-void senhaUsuario(controlaNos *topo, int vlrDeposito);
+void confirmaDeposito(controlaNos *topo, int vlrDeposito);//valida o deposito
+void senhaUsuario(controlaNos *topo, int vlrDeposito);//valida senha do usuario
 int vazio(controlaNos topo); //Verifica se a pilha esta vazia
 int saldoTotal(controlaNos topo);//verefica o total de saldo na conta
+int vlrTotal(controlaNos topo);
 
 int main(int argc, char *argv[]) {
 	controlaNos topoPilha = NULL;
@@ -44,7 +46,7 @@ int main(int argc, char *argv[]) {
                     printPause();
                 }
                 else {
-                    saque(&topoPilha);
+                    saque(topoPilha);
                 }
                 break;
             case 3:
@@ -82,16 +84,45 @@ void printPause(){
 
 //Esta função vai tirar o último nó da pilha, e retirá-lo de lá
 void saque(controlaNos *topo){
-	controlaNos popNo = NULL;
+	controlaNos novoNo = NULL;
 	float valorSaque = 0;
+	float saldoAtual = 0;
+	float teste = 0;
 	
 	printf("Favor, informe o valor desejado(a)\n");
 	scanf("%f",&valorSaque);
 	
-	popNo = *topo;
-	*topo = (*topo)->proximoNo;
+	//valorSaldo = valorSaldo + topo->valor;
+	//topo=topo->proximoNo;
 	
-	free(popNo);
+	teste = novoNo->sTotal;
+	printf("%.2f",novoNo->sTotal);
+	
+	//saldoAtual = vlrTotal(topo);
+	//saldoAtual = saldoAtual - valorSaque;
+	//printf("%.2f\n",saldoAtual);
+	printPause();	
+	
+	
+	//valorSaldo = valorSaldo + topo->valor;
+	//topo=topo->proximoNo;
+	
+	//controlaNos popNo = NULL;
+    //popNo = *topo;
+    //*topo = (*topo)->proximoNo;
+    //free(popNo);
+	
+	free(novoNo);
+}
+
+//função que pega o saldo total do usuario
+int vlrTotal(controlaNos topo){
+	float valorSaldo = 0;
+	while(topo != NULL){
+		valorSaldo = valorSaldo + topo->valor;
+		topo=topo->proximoNo;
+	}
+	return valorSaldo;
 }
 
 //função que vai inserir elementos na pilha
@@ -122,7 +153,7 @@ void deposito(controlaNos *topo, int vlrDeposito){
 //eu fiz essa função para não ficar muito codigo na função deposito
 void confirmaDeposito(controlaNos *topo, int vlrDeposito){
 	controlaNos novoNo = NULL;
-
+	float valorTotal = 0;
 	novoNo = (controlaNos) malloc(sizeof(nos));
 	if(novoNo == NULL)
 	{
@@ -133,18 +164,30 @@ void confirmaDeposito(controlaNos *topo, int vlrDeposito){
 		novoNo->valor=vlrDeposito;
 		novoNo->proximoNo = *topo;
 		*topo=novoNo;
+
+		salvaRelatorio(controlaNos);
+
 		printPause();	
 	}
+}
+
+//função que salva valores no relátorio
+salvaRelatorio(controlaNos *topo){
+	
 }
 
 //função que verefica a senha do usuario
 void senhaUsuario(controlaNos *topo, int vlrDeposito){
 	controlaNos novoNo = NULL;
-	int senha = 4221;
+	int tentativas = 2;
+	int aux = 3;
+	int senha = 123;
 	int userSenha = 0;
 	novoNo = (controlaNos) malloc(sizeof(nos));
 	printf("PARA DEPOSITOS ACIMA DE 1.000,00 SERA NECESSARIO SENHA DO FAVORECIDO!!!\n\n");
 	printf("Favor, informe sua senha para concluir o deposito!\n");
+	while(aux != 0)
+	{	
 	scanf("%d",&userSenha);	
 		if(senha == userSenha)
 		{
@@ -155,8 +198,16 @@ void senhaUsuario(controlaNos *topo, int vlrDeposito){
 			printPause();
 		}else
 		{
-			printf("Senha incorreta!\n\n");
+			printf("Senha incorreta!\n");
+			printf("Voce tem %d restatntes!\n\n",tentativas);
+			tentativas--;
+			aux--;
+			if(aux == 0){
+				printf("Deposito nao concluido!\n\n");
+				printPause();
+			}
 		}
+	}
 	printPause();
 }
 
@@ -167,16 +218,17 @@ int vazio(controlaNos topo){
 
 //função que exibe os valores na pilha
 void imprime(controlaNos topo){
+	int count = 1;
 	while(topo != NULL){
-		printf("-->%.2f\n", topo->valor);
+		printf("%d deposito -->%.2f\n",count, topo->valor);
 		topo=topo->proximoNo;
+		count++;
 	}
 }
 
 //função que soma os valores da conta do usúario
 int saldoTotal(controlaNos topo){
 	float valorSaldo = 0;
-	controlaNos saldo = NULL;
 	while(topo != NULL){
 		valorSaldo = valorSaldo + topo->valor;
 		topo=topo->proximoNo;

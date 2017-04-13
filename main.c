@@ -118,18 +118,16 @@ void deposito(controlaNos *topo, int vlrDeposito){
 
 	novoNo = (controlaNos) malloc(sizeof(nos));
 
-	if(novoNo == NULL)
-	{
-		printf("Erro na memoria!\n\n");
-		printPause();
-	}else if((vlrDeposito != 0)&&(vlrDeposito >0))
+	 if((vlrDeposito != 0)&&(vlrDeposito >0))
 		{
 			if(vlrDeposito >= 1000)
 			{
 				senhaUsuario(topo,vlrDeposito);
 				printPause();
-			}else{
+			}else
+			{
 				confirmaDeposito(topo,vlrDeposito);
+				printPause();
 			}
 		}else
 		{
@@ -209,6 +207,7 @@ void senhaUsuario(controlaNos *topo, int vlrDeposito){
 			novoNo->valor=vlrDeposito;
 			novoNo->proximoNo = *topo;
 			*topo=novoNo;
+			aux=0;
 			printPause();
 		}else
 		{
@@ -216,7 +215,8 @@ void senhaUsuario(controlaNos *topo, int vlrDeposito){
 			printf("Voce tem %d restatntes!\n\n",tentativas);
 			tentativas--;
 			aux--;
-			if(aux == 0){
+			if(aux == 0)
+			{
 				printf("Deposito nao concluido!\n\n");
 				printPause();
 			}

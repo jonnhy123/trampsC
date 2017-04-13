@@ -3,6 +3,8 @@
 
 typedef struct no {
 	float valor;
+	int tsaque;
+	int tdeposito;
 	float sTotal;
 	struct no *proximoNo;
 }nos;
@@ -15,6 +17,7 @@ void saque(controlaNos *topo); //Desempilha valores
 void imprime(controlaNos topo); //Imprime a pilha
 void confirmaDeposito(controlaNos *topo, int vlrDeposito);//valida o deposito
 void senhaUsuario(controlaNos *topo, int vlrDeposito);//valida senha do usuario
+void salvaRelatorio(controlaNos topo);
 int vazio(controlaNos topo); //Verifica se a pilha esta vazia
 int saldoTotal(controlaNos topo);//verefica o total de saldo na conta
 int vlrTotal(controlaNos topo);
@@ -24,13 +27,14 @@ int main(int argc, char *argv[]) {
     int menu = 0, num = 0;
     float vlrDeposito = 0;
     
-    while (menu != 5) {
+    while (menu != 6) {
         printf("Escolha uma opcao:\n"
                "1 - Deposito\n"
                "2 - Saque\n"
                "3 - Extrato\n"
                "4 - Total Saldo\n"
-			   "5 - Encerrar sessao\n");
+			   "5 - Relatorios\n"
+			   "6 - Encerrar sessao\n\n");
         scanf("%d",&menu);
         system("cls");
         switch (menu) {
@@ -64,7 +68,15 @@ int main(int argc, char *argv[]) {
 					saldoTotal(topoPilha);	
 				}
 				printPause();
-				break;	 
+				break;
+			case 5:
+				if(vazio(topoPilha)){
+					printf("Nao ha valores a ser exibido!\n\n");
+				}else {
+					salvaRelatorio(topoPilha);
+				}   
+				printPause();
+				break;		 
             default:
                 printf("Opcao invalida!\n\n");
                 printPause();
@@ -164,16 +176,18 @@ void confirmaDeposito(controlaNos *topo, int vlrDeposito){
 		novoNo->valor=vlrDeposito;
 		novoNo->proximoNo = *topo;
 		*topo=novoNo;
-
-		salvaRelatorio(controlaNos);
-
 		printPause();	
 	}
 }
 
-//função que salva valores no relátorio
-salvaRelatorio(controlaNos *topo){
-	
+//função que salva quantidade de depositos no relátorio
+void salvaRelatorio(controlaNos topo){
+	int count = 0;
+	while(topo != NULL){
+		count++;
+		topo=topo->proximoNo;
+	}
+	printf("Total de depositos --> %.2d\n",count);
 }
 
 //função que verefica a senha do usuario
@@ -220,7 +234,7 @@ int vazio(controlaNos topo){
 void imprime(controlaNos topo){
 	int count = 1;
 	while(topo != NULL){
-		printf("%d deposito -->%.2f\n",count, topo->valor);
+		printf("Deposito no valor de --> %.2f\n",topo->valor);
 		topo=topo->proximoNo;
 		count++;
 	}
@@ -233,5 +247,5 @@ int saldoTotal(controlaNos topo){
 		valorSaldo = valorSaldo + topo->valor;
 		topo=topo->proximoNo;
 	}
-	printf("Seu saldo eh de RS%.2f\n\n", valorSaldo);
+	printf("Seu saldo eh de --> RS%.2f\n\n", valorSaldo);
 }

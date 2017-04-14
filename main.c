@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
     while (menu != 5) {
         printf("Escolha uma opcao:\n"
                "1 - Deposito\n"
-               "2 - Saque(Funcao nao termina, favor nao executar)\n"
+               "2 - Saque(Funcao nao terminada, favor nao executar)\n"
                "3 - Extrato\n"
 			   "4 - Relatorios\n"
 			   "5 - Encerrar sessao\n\n");
